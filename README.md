@@ -19,6 +19,8 @@ Teknologi:
 - Input: PDF
 - Output: PDF
 
+
+WINDOWS
 ---
 ```powershell
 npm install
@@ -33,5 +35,23 @@ copy .env.example .env
 ```
 
 ```bash
+npm start
+```
+
+
+LINUX
+---
+```bash
+sudo apt update
+sudo apt install -y nodejs npm python3 python3-pip python3-venv git
+```
+
+```bash
+npm install
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+
 npm start
 ```
