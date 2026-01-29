@@ -39,6 +39,14 @@ npm start
 ```
 
 
+```bash
+curl -X POST "http://localhost:3200/watermark/lunas" ^
+  -F "file=@D:\Documents\invoice.pdf;type=application/pdf" ^
+  -o invoice-LUNAS.pdf
+```
+
+
+
 LINUX
 ---
 ```bash
@@ -54,4 +62,11 @@ pip install -r requirements.txt
 cp .env.example .env
 
 npm start
+```
+
+
+```bash
+curl -X POST "http://localhost:3200/watermark/lunas" \
+  -F "file=@/home/user/invoice.pdf;type=application/pdf" \
+  -o invoice-LUNAS.pdf
 ```
