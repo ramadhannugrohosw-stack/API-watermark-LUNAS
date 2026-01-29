@@ -45,6 +45,19 @@ curl -X POST "http://localhost:3200/watermark/lunas" ^
   -o invoice-LUNAS.pdf
 ```
 
+```bash
+curl -X POST "http://localhost:3200/watermark/lunas" ^
+  -F "file=@D:\Documents\invoice.pdf;type=application/pdf" ^
+  -F "options={
+    \"text\":\"LUNAS\",
+    \"rotate\":-20,
+    \"opacity\":0.18,
+    \"wmWidthPctOfContent\":0.40,
+    \"shiftXPctOfContent\":0.065,
+    \"shiftYPctOfContent\":-0.020
+  }" ^
+  -o invoice-LUNAS.pdf
+```
 
 
 LINUX
@@ -68,5 +81,18 @@ npm start
 ```bash
 curl -X POST "http://localhost:3200/watermark/lunas" \
   -F "file=@/home/user/invoice.pdf;type=application/pdf" \
+  -o invoice-LUNAS.pdf
+```
+```bash
+curl -X POST "http://localhost:3200/watermark/lunas" \
+  -F "file=@/home/user/invoice.pdf;type=application/pdf" \
+  -F 'options={
+    "text":"LUNAS",
+    "rotate":-20,
+    "opacity":0.18,
+    "wmWidthPctOfContent":0.40,
+    "shiftXPctOfContent":0.065,
+    "shiftYPctOfContent":-0.020
+  }' \
   -o invoice-LUNAS.pdf
 ```
