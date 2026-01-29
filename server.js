@@ -41,8 +41,8 @@ app.post("/watermark/lunas", upload.single("file"), async (req, res) => {
     text: "LUNAS",
     rotate: -20,
     opacity: 0.18,
-    wmWidthPctOfContent: 0.30,     // ✅ 10% ukuran konten
-    shiftXPctOfContent: -0.065,     // ✅ geser kanan dikit
+    wmWidthPctOfContent: 0.40,     // ✅ 10% ukuran konten
+    shiftXPctOfContent: 0.065,     // ✅ geser kanan dikit
     shiftYPctOfContent: -0.020,     // ✅ geser bawah dikit
   };
 

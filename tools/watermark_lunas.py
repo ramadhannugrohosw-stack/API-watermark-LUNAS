@@ -203,6 +203,8 @@ def make_stamp_png(opt: Opt, fontname: str, fontsize: float) -> Tuple[bytes, flo
     red = (1, 0, 0)
 
     text_w = fitz.get_text_length(text, fontname=fontname, fontsize=fontsize)
+
+    # === (UNCHANGED semantic) base text height approximation
     text_h = fontsize * 1.20
 
     stroke_w = max(6, fontsize * 0.1)
@@ -210,8 +212,16 @@ def make_stamp_png(opt: Opt, fontname: str, fontsize: float) -> Tuple[bytes, flo
     pad_x = max(10.0, fontsize * 0.85) + stroke_w
     pad_y = max(10.0, fontsize * 0.15) + stroke_w
 
+    # =========================
+    # ✅ FIX: vertical centering + baseline safety
+    # =========================
+    # PyMuPDF textbox uses baseline; too-small height can make text "disappear".
+    # Add a small leading (safe space), then shift textbox rect symmetrically.
+    leading = max(2.0, fontsize * 0.28)  # "char space" vertical safety
+
     w = text_w + pad_x * 5
-    h = text_h + pad_y * 1.5
+    h = text_h + (pad_y * 1.3) + leading  # stable; not too tall, not too short
+    # =========================
 
     stamp = fitz.open()
     sp = stamp.new_page(width=w, height=h)
@@ -228,17 +238,27 @@ def make_stamp_png(opt: Opt, fontname: str, fontsize: float) -> Tuple[bytes, flo
         draw_round_rect(shape, rect, radius)
 
     shape.finish(
-    color=red,
-    fill=None,
-    width=stroke_w,
-    closePath=True,
-    lineCap=1,      # round cap
-    lineJoin=1,     # round join  ✅ ini inti masalahnya
-    stroke_opacity=opt.opacity,
-)
+        color=red,
+        fill=None,
+        width=stroke_w,
+        closePath=True,
+        lineCap=1,      # round cap
+        lineJoin=1,     # round join  ✅ ini inti masalahnya
+        stroke_opacity=opt.opacity,
+    )
+
+    # =========================
+    # ✅ FIX: center text vertically by shrinking rect evenly (baseline-safe)
+    # =========================
+    text_rect = fitz.Rect(
+        rect.x0,
+        rect.y0 + (leading / 2.0),
+        rect.x1,
+        rect.y1 - (leading / 2.0),
+    )
 
     shape.insert_textbox(
-        rect,
+        text_rect,
         text,
         fontname=fontname,
         fontsize=fontsize,
@@ -247,6 +267,7 @@ def make_stamp_png(opt: Opt, fontname: str, fontsize: float) -> Tuple[bytes, flo
         align=fitz.TEXT_ALIGN_CENTER,
         render_mode=0,
     )
+    # =========================
 
     shape.commit(overlay=True)
 
